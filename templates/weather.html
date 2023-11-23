@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .hero.is-primary {
+            background: #3273dc;
+            color: white;
+        }
+
+        .notification.is-success {
+            background-color: #48c774;
+        }
+
+        .notification.is-danger {
+            background-color: #f14668;
+        }
+
+        .box {
+            margin-top: 20px;
+        }
+
+        .media-left img {
+            max-width: 50px;
+        }
+
+        .columns-container {
+            display: flex;
+        }
+
+        .left-column {
+            flex: 1;
+        }
+
+        .right-column {
+            flex: 1;
+        }
+        .card{
+            width: 200px;
+            height: 200px;
+            background-color: rgb(227, 184, 184);
+            text-align: center;
+            margin-inline: 5px;
+        }
+        .img-div img{
+            width: 50px;
+            height: 50px;   
+        }
+        .container-cards{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="hero is-primary is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h2 class="title">
+                    Weather Forecast
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <div class="columns-container">
+        <div class="left-column">
+            <section class="section" style="text-align: center;">
+                <h2 class="title" style="text-align: center;">Current Location</h2>
+                <article class="media">
+                    <div class="media-content">
+                        <div class="content">
+                            <article class="media">
+                                <div class="media">
+                                    <figure>
+                                        <img src="http://openweathermap.org/img/w/{{ weather_current.icon }}.png"
+                                            style="width: 300px; height: 300px;" alt="Image">
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <span class="title" style="font-size: 150px;">{{ weather_current.city
+                                                }}</span>
+                                            <br>
+                                            <span class="subtitle">{{ weather_current.temperature }}° F</span>
+                                            <br> {{ weather_current.description }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                            <div class="container-cards">
+                                {% for data in weather_forecast %}
+                                <div class="card">
+                                    <div class="img-div">
+                                        <img src = "http://openweathermap.org/img/w/{{ data.icon }}.png">
+                                    </div>
+                                    <h3>{{ data.temperature }}° F</h3>
+                                    <p>{{ data.description }}</p>
+                                    <p>{{ data.date }}</p>
+                                </div>
+                                {% endfor %}
+                        </div>
+                        </div>
+                    </div>
+                    
+                </article>
+            </section>
+        </div>
+
+
+        <div class="right-column">
+            <section class="section">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column is-offset-2 is-8">
+                            <form method="POST">
+                                <div class="field has-addons">
+                                    <div class="control is-expanded">
+                                        <input class="input" name="city" type="text" placeholder="City Name"
+                                            style="text-transform: capitalize;">
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-info">
+                                            Add City
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                            <div class="notification-container">
+                                {% for category, message in messages %}
+                                <div class="notification is-success">
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column is-offset-2 is-8">
+                            {% for weather in weather_data %}
+                            <div class="box">
+                                <article class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-50x50">
+                                            <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png"
+                                                alt="Image">
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <div class="content">
+                                            <p>
+                                                <span class="title">{{ weather.city }}</span>
+                                                <br>
+                                                <span class="subtitle">{{ weather.temperature }}° F</span>
+                                                <br> {{ weather.description }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="media-right">
+                                        <a href="{{ url_for('delete_city', name=weather.city) }}">
+                                            <button class="delete"></button>
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                &copy; 2023 WeatherForecast.com
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
