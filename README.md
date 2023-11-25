@@ -16,3 +16,4 @@ pip install flask
 pip install flask_sqlalchemy
 pip install requests
 
+![Weather Output](https://github.com/amovva10/Weather-App/assets/151645909/013172a6-1ed6-44bd-a905-66670d26ee1b)
